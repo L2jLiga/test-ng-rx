@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { interval, Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { map, startWith, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-subcomp',
@@ -12,29 +12,33 @@ export class SubcompComponent implements OnChanges, OnInit, OnDestroy {
   @Input() public two: boolean;
   @Input() public three: boolean;
 
+  events: string[] = [];
   destroyed$: Subject<void> = new Subject();
-
   obs$: Observable<number>;
 
   constructor() {
     this.obs$ = interval(1000)
-      .pipe(takeUntil(this.destroyed$));
+      .pipe(
+        startWith(-1),
+        map(a => ++a),
+        takeUntil(this.destroyed$)
+      );
 
-    console.log('Component constructor called');
+    this.events.push('Component constructor called');
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    console.log('Changes detected!');
+    this.events.push('Changes detected!');
 
-    console.log('Input[one]=%s,\nInput[two]=%s,\nInput[three]=%s', this.one, this.two, this.three);
+    this.events.push(`Input[one]=${this.one},\n Input[two]=${this.two},\n Input[three]=${this.three}`);
   }
 
   public ngOnInit(): void {
-    console.log('On Init lifecycle hook called');
+    this.events.push('On Init lifecycle hook called');
   }
 
   ngOnDestroy() {
-    console.log('On Destroy lifecycle hook called');
+    this.events.push('On Destroy lifecycle hook called');
     this.destroyed$.next();
     this.destroyed$.complete();
   }

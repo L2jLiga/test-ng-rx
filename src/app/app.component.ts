@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of, timer } from 'rxjs';
-import { map, share, shareReplay } from 'rxjs/operators';
+import { map, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +8,8 @@ import { map, share, shareReplay } from 'rxjs/operators';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  cond = true;
+  showSubComp = true;
+  showSubCompOnpush = true;
 
   timerWithShareReplay$: Observable<boolean>;
   timer$: Observable<boolean>;
@@ -18,13 +19,5 @@ export class AppComponent implements OnInit {
     this.timer$ = timer(5000).pipe(map(Boolean));
     this.timerWithShareReplay$ = this.timer$.pipe(shareReplay());
     this.ofBoolean$ = of(true);
-  }
-
-  dis() {
-    this.cond = false;
-  }
-
-  en() {
-    this.cond = true;
   }
 }

@@ -4,11 +4,13 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { SubcompComponent } from './subcomp/subcomp.component';
+import { SubcompOnpushComponent } from './subcomp-onpush/subcomp-onpush.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SubcompComponent
+    SubcompComponent,
+    SubcompOnpushComponent
   ],
   imports: [
     BrowserModule,
